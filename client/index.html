@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>She Can Foundation</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#6a11cb,#2575fc);
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:450px;
+      background:white;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    .form-group{
+      margin-bottom:15px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:bold;
+    }
+
+    input,textarea{
+      width:100%;
+      padding:12px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      outline:none;
+    }
+
+    textarea{
+      resize:none;
+      height:100px;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:8px;
+      background:#2575fc;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#125de6;
+    }
+
+    .message{
+      margin-top:15px;
+      text-align:center;
+      font-weight:bold;
+    }
+
+    .success{
+      color:green;
+    }
+
+    .error{
+      color:red;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h2>She Can Foundation</h2>
+
+    <form id="contactForm">
+
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="name" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="message" required></textarea>
+      </div>
+
+      <button type="submit">
+        Submit
+      </button>
+
+    </form>
+
+    <div id="responseMsg" class="message"></div>
+
+  </div>
+
+  <script>
+
+const form = document.getElementById("contactForm");
+const responseMsg = document.getElementById("responseMsg");
+
+form.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const data = {
+
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value
+
+    };
+
+    console.log(data);
+
+    try {
+
+        const response = await fetch("http://127.0.0.1:5000/api/contact", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(data)
+
+        });
+
+        const result = await response.json();
+
+        console.log(result);
+
+        responseMsg.innerHTML = result.message;
+        responseMsg.style.color = "green";
+
+        form.reset();
+
+    } catch (error) {
+
+        console.log(error);
+
+        responseMsg.innerHTML = "Submission Failed";
+        responseMsg.style.color = "red";
+
+    }
+
+});
+
+</script>
+</body>
+</html>
